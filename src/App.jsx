@@ -1,32 +1,62 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import { ContactsList } from './components/ContactsList'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [persons, setPersons] = useState([
+    {id: 1, name: 'Arto Hellas'}
+  ])
+
+  console.log(persons)
+  const [newName, setNewName] = useState("")
+
+
+  const handleChange = (e) =>{
+    setNewName(e.target.value)
+
+  }
+
+  const addContact = (e) =>{
+    e.preventDefault()
+    let contactObj = {
+      name: newName,
+      id: persons.length + 1
+    }
+
+    let data = persons.find((person) => person.name === newName)
+
+    if(data){
+      
+      return window.alert(data.name + " Already exist")
+    }
+     
+
+    setPersons(persons.concat(contactObj))
+    setNewName('')
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1>PhoneBook</h1>
+      <div className="form">
+        <form action="" onSubmit={addContact}>
+          <div className="input">
+            <input type="text" value={newName} onChange={handleChange} />
+          </div>
+          <div className="button">
+            <button type='submit'>Add</button>
+          </div>
+        </form>
+        <h2>Number</h2>
+
+        <ul>
+          {
+            persons.map((person) => <ContactsList key={person.id} person={person} />)
+          }
+        </ul>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      
     </div>
   )
 }
