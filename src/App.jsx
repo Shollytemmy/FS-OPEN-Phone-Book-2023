@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 import { ContactsList } from './components/ContactsList'
 import { SearchInput } from './components/SearchInput'
+import { Form } from './components/Form'
+import { ContactsCard } from './components/ContactsCard'
 
 function App() {
   const [persons, setPersons] = useState([
@@ -53,28 +55,11 @@ function App() {
       <SearchInput query={query} setQuery={setQuery} />
       <div className="form">
         <h2>Add New Contact</h2>
-        <form action="" onSubmit={addContact}>
-          <div className="input">
-            <label htmlFor="">Name: </label>
-            <input type="text" value={newName} onChange={handleChange} />
-          </div>
-          <div className="number">
-            <label htmlFor="">Number: </label>
-            <input type="text" value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
-          </div>
-          <div className="button">
-            <button type='submit'>Add</button>
-          </div>
-        </form>
+        <Form addContact={addContact} newName={newName} handleChange={handleChange} newNumber={newNumber} setNewNumber={setNewNumber} />
+
         <h2>Number</h2>
 
-        <ul>
-          {
-            contactFiltered.length ?
-            contactFiltered.map((person) => <ContactsList key={person.id} person={person} />)
-            : (<h1>No Name in the Contact</h1>)
-          }
-        </ul>
+        <ContactsCard contactFiltered={contactFiltered} />
       </div>
       
     </div>
