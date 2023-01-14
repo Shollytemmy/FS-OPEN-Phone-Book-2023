@@ -5,11 +5,15 @@ import { ContactsList } from './components/ContactsList'
 
 function App() {
   const [persons, setPersons] = useState([
-    {id: 1, name: 'Arto Hellas'}
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ])
 
   console.log(persons)
   const [newName, setNewName] = useState("")
+  const [newNumber, setNewNumber] = useState("")
 
 
   const handleChange = (e) =>{
@@ -21,6 +25,7 @@ function App() {
     e.preventDefault()
     let contactObj = {
       name: newName,
+      number: newNumber,
       id: persons.length + 1
     }
 
@@ -28,12 +33,13 @@ function App() {
 
     if(data){
       
-      return window.alert(data.name + " Already exist")
+      return window.alert(`${data.name} is already added to phonebook`)
     }
      
 
     setPersons(persons.concat(contactObj))
     setNewName('')
+    setNewNumber('')
   }
 
   return (
@@ -43,6 +49,9 @@ function App() {
         <form action="" onSubmit={addContact}>
           <div className="input">
             <input type="text" value={newName} onChange={handleChange} />
+          </div>
+          <div className="number">
+            <input type="text" value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
           </div>
           <div className="button">
             <button type='submit'>Add</button>
