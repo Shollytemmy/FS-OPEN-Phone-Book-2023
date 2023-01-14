@@ -2,6 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import { ContactsList } from './components/ContactsList'
+import { SearchInput } from './components/SearchInput'
 
 function App() {
   const [persons, setPersons] = useState([
@@ -14,6 +15,8 @@ function App() {
   console.log(persons)
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
+  const [query, setQuery] = useState("")
+  const [showAll, setShowAll] = useState(true)
 
 
   const handleChange = (e) =>{
@@ -42,15 +45,21 @@ function App() {
     setNewNumber('')
   }
 
+  const contactFiltered =  persons.filter((person) => person.name.toLowerCase().includes(query.trim().toLowerCase()))
+
   return (
     <div className="App">
       <h1>PhoneBook</h1>
+      <SearchInput query={query} setQuery={setQuery} />
       <div className="form">
+        <h2>Add New Contact</h2>
         <form action="" onSubmit={addContact}>
           <div className="input">
+            <label htmlFor="">Name: </label>
             <input type="text" value={newName} onChange={handleChange} />
           </div>
           <div className="number">
+            <label htmlFor="">Number: </label>
             <input type="text" value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
           </div>
           <div className="button">
@@ -61,7 +70,9 @@ function App() {
 
         <ul>
           {
-            persons.map((person) => <ContactsList key={person.id} person={person} />)
+            contactFiltered.length ?
+            contactFiltered.map((person) => <ContactsList key={person.id} person={person} />)
+            : (<h1>No Name in the Contact</h1>)
           }
         </ul>
       </div>
