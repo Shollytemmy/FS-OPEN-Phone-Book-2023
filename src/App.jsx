@@ -41,14 +41,21 @@ useEffect(() => {
       number: newNumber
     }
 
-    if(!newName && !newNumber) return
+    if(!newName || !newNumber) return
 
     let data = persons.find((person) => person.name === newName && person.number === newNumber)
     // console.log(data)
 
     if(data){
       
-      return window.alert(`${data.name} is already added to phonebook`)
+      if (window.confirm(`${data.name} Alredy exist Do you want to replace the old name iwth the new name ? `));
+      contactsServices.updatePersons(data.id, contactObj)
+      .then((response) => {
+        console.log(response)
+
+        setPersons(persons.map((person) => person.id === data.id ? {...person, response} : person))
+      })
+       return 
     }
 
     contactsServices.createPersons(contactObj)
@@ -64,12 +71,22 @@ useEffect(() => {
 
 
   const handleDeleteContact = (id) =>{
+    if(window.confirm('Are you sure you want to delete'))
 
     contactsServices.removePersons(id)
     .then((response) => {
       setPersons(persons.filter((person) => person.id !== id))
       // console.log(response)
     })
+  }
+
+  const handleUdatePersons = (persons) =>{
+
+
+    contactsServices.createPersons()
+
+
+
   }
 
 
@@ -96,3 +113,4 @@ useEffect(() => {
 }
 
 export default App
+/**return window.alert(`${data.name} is already added to phonebook`) */
