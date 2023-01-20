@@ -6,13 +6,14 @@ import { SearchInput } from './components/SearchInput'
 import { Form } from './components/Form'
 import { ContactsCard } from './components/ContactsCard'
 import contactsServices from "./services/contacts"
+import { Notification } from './components/Notification'
 
 function App() {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [query, setQuery] = useState("")
-  const [showAll, setShowAll] = useState(true)
+  const [showMessage, setMessage] = useState("Added contacts")
 
 
 useEffect(() => {
@@ -51,7 +52,11 @@ useEffect(() => {
       if (window.confirm(`${data.name} Alredy exist Do you want to replace the old name iwth the new name ? `));
       contactsServices.updatePersons(data.id, contactObj)
       .then((response) => {
-        console.log(response)
+        setMessage(`${response.name} contacts Edited`)
+      setTimeout(() => {
+        setMessage(null)
+
+      },2000)
 
         setPersons(persons.map((person) => person.id === data.id ? {...person, response} : person))
       })
@@ -62,6 +67,13 @@ useEffect(() => {
     .then((response) => {
       
       setPersons(persons.concat(response))
+      setMessage(`${response.name} added to the phonebook`)
+      setTimeout(() => {
+        setMessage(null)
+
+      },2000)
+
+      
     })
 
  
@@ -80,14 +92,7 @@ useEffect(() => {
     })
   }
 
-  const handleUdatePersons = (persons) =>{
 
-
-    contactsServices.createPersons()
-
-
-
-  }
 
 
 
@@ -97,6 +102,7 @@ useEffect(() => {
 
   return (
     <div className="App">
+      <Notification message={showMessage} />
       <h1>PhoneBook</h1>
       <SearchInput query={query} setQuery={setQuery} />
       <div className="form">
