@@ -7,6 +7,7 @@ import { Form } from './components/Form'
 import { ContactsCard } from './components/ContactsCard'
 import contactsServices from "./services/contacts"
 import { Notification } from './components/Notification'
+import { Footer } from './components/Footer'
 
 function App() {
   const [persons, setPersons] = useState([])
@@ -113,7 +114,8 @@ useEffect(() => {
 
         <ContactsCard contactFiltered={contactFiltered} handleDeleteContact={handleDeleteContact} />
       </div>
-      
+
+      <Footer />
     </div>
   )
 }
