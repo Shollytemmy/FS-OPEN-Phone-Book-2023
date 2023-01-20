@@ -14,6 +14,7 @@ function App() {
   const [query, setQuery] = useState("")
   const [showAll, setShowAll] = useState(true)
 
+
 useEffect(() => {
   contactsServices
   .getAllPersons()
@@ -55,12 +56,25 @@ useEffect(() => {
       
       setPersons(persons.concat(response))
     })
-     
 
-    
+ 
     setNewName('')
     setNewNumber('')
   }
+
+
+  const handleDeleteContact = (id) =>{
+
+    contactsServices.removePersons(id)
+    .then((response) => {
+      setPersons(persons.filter((person) => person.id !== id))
+      // console.log(response)
+    })
+  }
+
+
+
+
 
   const contactFiltered =  persons.filter((person) => person.name.toLowerCase().includes(query.trim().toLowerCase()))
 
@@ -74,7 +88,7 @@ useEffect(() => {
 
         <h2>Number</h2>
 
-        <ContactsCard contactFiltered={contactFiltered} />
+        <ContactsCard contactFiltered={contactFiltered} handleDeleteContact={handleDeleteContact} />
       </div>
       
     </div>
