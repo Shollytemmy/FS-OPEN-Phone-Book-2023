@@ -8,8 +8,6 @@ import { ContactsCard } from './components/ContactsCard'
 
 function App() {
   const [persons, setPersons] = useState([])
-
-  console.log(persons)
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
   const [query, setQuery] = useState("")
@@ -37,8 +35,7 @@ useEffect(() => {
     e.preventDefault()
     let contactObj = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
     }
 
     let data = persons.find((person) => person.name === newName)
@@ -47,9 +44,15 @@ useEffect(() => {
       
       return window.alert(`${data.name} is already added to phonebook`)
     }
+
+    axios.post("http://127.0.0.1:5174/persons", contactObj)
+    .then((response) => {
+      console.log(response)
+      setPersons(persons.concat(response.data))
+    })
      
 
-    setPersons(persons.concat(contactObj))
+    
     setNewName('')
     setNewNumber('')
   }
