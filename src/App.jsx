@@ -5,6 +5,7 @@ import { ContactsList } from './components/ContactsList'
 import { SearchInput } from './components/SearchInput'
 import { Form } from './components/Form'
 import { ContactsCard } from './components/ContactsCard'
+import contactsServices from "./services/contacts"
 
 function App() {
   const [persons, setPersons] = useState([])
@@ -14,9 +15,10 @@ function App() {
   const [showAll, setShowAll] = useState(true)
 
 useEffect(() => {
-  axios.get("http://127.0.0.1:5174/persons")
-  .then((response) =>{
-    setPersons(response.data)
+  contactsServices
+  .getAllPersons()
+  .then((contact) =>{
+    setPersons(contact)
   })
 
 }, [])
@@ -38,17 +40,20 @@ useEffect(() => {
       number: newNumber
     }
 
-    let data = persons.find((person) => person.name === newName)
+    if(!newName && !newNumber) return
+
+    let data = persons.find((person) => person.name === newName && person.number === newNumber)
+    // console.log(data)
 
     if(data){
       
       return window.alert(`${data.name} is already added to phonebook`)
     }
 
-    axios.post("http://127.0.0.1:5174/persons", contactObj)
+    contactsServices.createPersons(contactObj)
     .then((response) => {
-      console.log(response)
-      setPersons(persons.concat(response.data))
+      
+      setPersons(persons.concat(response))
     })
      
 
